@@ -77,6 +77,3 @@ docker run -it python:3.9 python
 
 Starting python image with python mod.
 
-### 1.2.3 Building Docker Image
-
-
