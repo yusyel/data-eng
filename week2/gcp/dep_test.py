@@ -3,7 +3,7 @@ import pandas as pd
 from prefect import flow, task
 from prefect_gcp.cloud_storage import GcsBucket
 from prefect_gcp import GcpCredentials
-
+from prefect.deployments import Deployment
 
 @task(retries=3)
 def extract_from_gcs(color: str, year: int, month: int) -> Path:
@@ -49,5 +49,10 @@ def etl_gcs_to_bq():
     df = transform(path)
     write_bq(df)
 
+deploy = Deployment.build_from_flow(
+    flow=etl_gcs_to_bq,
+    work_queue_name = "on",
+    name='test')
+
 if __name__ == "__main__":
-    etl_gcs_to_bq()
+    deploy.apply()
