@@ -17,10 +17,9 @@ def extract_from_gcs(color: str, year: int, month: int) -> Path:
 def transform(path: Path) -> pd.DataFrame:
     """Data cleaning example"""
     df = pd.read_parquet(path)
-    df["lpep_dropoff_datetime"] = pd.to_datetime(df["lpep_dropoff_datetime"])
-    print(f"pre: missing passenger count: {df['passenger_count'].isna().sum()}")
-    df["passenger_count"].fillna(0, inplace=True)
-    print(f"post: missing passenger count: {df['passenger_count'].isna().sum()}")
+    #print(f"pre: missing passenger count: {df['passenger_count'].isna().sum()}")
+    #df["passenger_count"].fillna(0, inplace=True)
+    #print(f"post: missing passenger count: {df['passenger_count'].isna().sum()}")
     return df
 
 
@@ -32,7 +31,7 @@ def write_bq(df: pd.DataFrame) -> None:
     gcp_credentials_block = GcpCredentials.load("zoom-gcp-creds")
 
     df.to_gbq(
-        destination_table="data_all.green_tripdata",
+        destination_table="data_all.fhv_tripdata",
         project_id="pelagic-logic-375820",
         credentials=gcp_credentials_block.get_credentials_from_service_account(),
         chunksize=500_000,
@@ -49,12 +48,12 @@ def main(year:int, month:int, color:str) -> None:
     write_bq(df)
 
 @flow()
-def etl_gcs_to_bq(months: list[int] = [1,2,3,4,5,6,7,8,9,10,11,12], year: int = 2019, color:str = "green"):
+def etl_gcs_to_bq(months: list[int] = [1,2,3,4,5,6,7,8,9,10,11,12], year: int = 2019, color:str = "fhv"):
     for month in months:
         main(year, month, color)
 
 if __name__ == "__main__":
-    color = "green"
+    color = "fhv"
     months = [1,2,3,4,5,6,7,8,9,10,11,12]
     year = 2019
     etl_gcs_to_bq(months, year, color)

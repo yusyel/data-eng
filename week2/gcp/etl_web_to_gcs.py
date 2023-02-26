@@ -20,8 +20,6 @@ def fetch(dataset_url: str) -> pd.DataFrame:
 def clean(df: pd.DataFrame) -> pd.DataFrame:
     """Fix dtype issues"""
     print(df.dtypes)
-    df["lpep_pickup_datetime"] = pd.to_datetime(df["lpep_pickup_datetime"])
-    df["lpep_pickup_datetime"] = pd.to_datetime(df["lpep_pickup_datetime"])
     print(df.head(2))
     print(f"columns: {df.dtypes}")
     print(f"rows: {len(df)}")
@@ -42,7 +40,7 @@ def write_gcs(path: Path) -> None:
     gcs_block = GcsBucket.load("zoom-gcs")
     gcs_block.upload_from_path(from_path=path, to_path=path)
     return
-
+#https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhv/fhv_tripdata_2019-01.csv.gz
 @flow()
 def main(year:int, month:int, color:str) -> None:
     dataset_file = f"{color}_tripdata_{year}-{month:02}"
@@ -53,11 +51,11 @@ def main(year:int, month:int, color:str) -> None:
     write_gcs(path)
 
 @flow()
-def etl_web_to_gcs(months: list[int] = [1,2,3,4,5,6,7,8,9,10,11,12], year: int = 2020, color:str = "green")-> None:
+def etl_web_to_gcs(months: list[int] = [1,2,3,4,5,6,7,8,9,10,11,12], year: int = 2019, color:str = "fhv")-> None:
     for mount in months:
         main (year, mount, color)
 if __name__ == "__main__":
-    color = "green"
+    color = "fhv"
     months = [1,2,3,4,5,6,7,8,9,10,11,12]
-    year = 2020
+    year = 2019
     etl_web_to_gcs()
