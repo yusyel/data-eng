@@ -9,4 +9,4 @@ macros:
         type: int
         description: > 
           payment_type value.
-            Must be one of the accepted values, otherwise the macro will return null
+          Must be one of the accepted values, otherwise the macro will return null
