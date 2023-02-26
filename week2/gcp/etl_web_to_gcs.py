@@ -12,14 +12,16 @@ def fetch(dataset_url: str) -> pd.DataFrame:
     #     raise Exception
 
     df = pd.read_csv(dataset_url)
+    df.dtypes
     return df
 
 
 @task(log_prints=True)
 def clean(df: pd.DataFrame) -> pd.DataFrame:
     """Fix dtype issues"""
-    df["tpep_pickup_datetime"] = pd.to_datetime(df["tpep_pickup_datetime"])
-    df["tpep_dropoff_datetime"] = pd.to_datetime(df["tpep_dropoff_datetime"])
+    print(df.dtypes)
+    df["lpep_pickup_datetime"] = pd.to_datetime(df["lpep_pickup_datetime"])
+    df["lpep_pickup_datetime"] = pd.to_datetime(df["lpep_pickup_datetime"])
     print(df.head(2))
     print(f"columns: {df.dtypes}")
     print(f"rows: {len(df)}")
@@ -42,19 +44,20 @@ def write_gcs(path: Path) -> None:
     return
 
 @flow()
-def etl_web_to_gcs() -> None:
-    """The main ETL function"""
-    color = "yellow"
-    year = 2021
-    month = 1
+def main(year:int, month:int, color:str) -> None:
     dataset_file = f"{color}_tripdata_{year}-{month:02}"
     dataset_url = f"https://github.com/DataTalksClub/nyc-tlc-data/releases/download/{color}/{dataset_file}.csv.gz"
-
     df = fetch(dataset_url)
     df_clean = clean(df)
     path = write_local(df_clean, color, dataset_file)
     write_gcs(path)
 
-
+@flow()
+def etl_web_to_gcs(months: list[int] = [1,2,3,4,5,6,7,8,9,10,11,12], year: int = 2020, color:str = "green")-> None:
+    for mount in months:
+        main (year, mount, color)
 if __name__ == "__main__":
+    color = "green"
+    months = [1,2,3,4,5,6,7,8,9,10,11,12]
+    year = 2020
     etl_web_to_gcs()
