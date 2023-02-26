@@ -30,7 +30,7 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
 @task()
 def write_local(df: pd.DataFrame, color: str, dataset_file: str) -> Path:
     """Write DataFrame out locally as parquet file"""
-    path = Path(f"data/{color}/{dataset_file}.parquet")
+    path = Path(f"{color}/{dataset_file}.parquet")
     df.to_parquet(path, compression="gzip")
     return path
 
@@ -64,7 +64,7 @@ def etl_parent_flow(months: list[int] = [1,2], year: int = 2019, color:str = "ye
 
 
 if __name__ == "__main__":
-    color = "yellow"
-    months = [2,3]
+    color = "green"
+    months = [1,2,3,4,5,6,7,8,9,10,11,12]
     year = 2019
     etl_parent_flow(months, year, color)

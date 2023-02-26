@@ -13,7 +13,8 @@ Pre-reqs:
 """
 
 # services = ['fhv','green','yellow']
-init_url = 'https://nyc-tlc.s3.amazonaws.com/trip+data/'
+init_url = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/'
+#https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2019-01.csv.gz
 # switch out the bucketname
 BUCKET = os.environ.get("GCP_GCS_BUCKET", "de_zoomcamp_2179")
 
@@ -41,7 +42,7 @@ def web_to_gcs(year, service):
         month = month[-2:]
 
         # csv file_name 
-        file_name = service + '_tripdata_' + year + '-' + month + '.csv'
+        file_name =  service + '_tripdata_' + year + '-' + month + '.csv.gz'
 
         # download it using requests via a pandas df
         request_url = init_url + file_name
@@ -51,7 +52,7 @@ def web_to_gcs(year, service):
 
         # read it back into a parquet file
         df = pd.read_csv(file_name)
-        file_name = file_name.replace('.csv', '.parquet')
+        file_name = file_name.replace('.csv.gz', '.parquet')
         df.to_parquet(file_name, engine='pyarrow')
         print(f"Parquet: {file_name}")
 
@@ -60,7 +61,8 @@ def web_to_gcs(year, service):
         print(f"GCS: {service}/{file_name}")
 
 
-web_to_gcs('2019', 'green')
-web_to_gcs('2020', 'green')
 web_to_gcs('2019', 'yellow')
 web_to_gcs('2020', 'yellow')
+# web_to_gcs('2019', 'yellow')
+# web_to_gcs('2020', 'yellow')
+# web_to_gcs('2020', 'yellow')
