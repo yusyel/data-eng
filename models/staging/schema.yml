@@ -1,10 +1,11 @@
 version: 2
 
 sources:
-  -name: staging
+  - name: staging
     database: pelagic-logic-375820
     schema: data_all
 
     tables:
-    -name: green_tripdata
-    -name: yellow_tripdata
+    - name: green_tripdata
+    - name: yellow_tripdata
+    -
