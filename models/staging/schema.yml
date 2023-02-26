@@ -7,7 +7,7 @@ sources:
       #database: taxi-rides-ny-339813
 
       # For postgres:
-      database: production
+      database: pelagic-logic-375820
 
       schema: data_all
 
