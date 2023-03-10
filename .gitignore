@@ -8,3 +8,4 @@ logs/
 *.crc
 *.parquet.crc
 fhvhv_tripdata_2021-06.csv
+week5/notebook/fhvhv/2021/01/*
