@@ -6,3 +6,4 @@ logs/
 *.csv
 *.csv.gz
 *.crc
+*.parquet.crc
