@@ -4,4 +4,5 @@ dbt_packages/
 logs/
 .test
 *.csv
+*.csv.gz
 *.crc
