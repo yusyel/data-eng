@@ -7,3 +7,4 @@ logs/
 *.csv.gz
 *.crc
 *.parquet.crc
+fhvhv_tripdata_2021-06.csv
